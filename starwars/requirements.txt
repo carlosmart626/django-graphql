@@ -1,0 +1,9 @@
+Django==1.11.6
+django-filters==0.2.1
+graphene==1.4.1
+graphql-core==1.1
+graphql-relay==0.4.5
+promise==2.0.2
+pytz==2017.2
+six==1.11.0
+typing==3.6.2
