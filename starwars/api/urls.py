@@ -12,6 +12,6 @@ class AuthGraphQLView(JSONWebTokenAuthMixin, GraphQLView):
 
 
 urlpatterns = [
-  # url(r'^', csrf_exempt(AuthGraphQLView.as_view(schema=schema, graphiql=True))),
+  url(r'^require-auth/', csrf_exempt(AuthGraphQLView.as_view(schema=schema, graphiql=True))),
   url(r'^', csrf_exempt(GraphQLView.as_view(schema=schema, graphiql=True))),
 ]

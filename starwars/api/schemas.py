@@ -11,8 +11,8 @@ from movies.schemas import MovieNode
 class GlobalQuery(ObjectType):
     human = relay.Node.Field(HumanCharacterNode)
     humans_characters = DjangoFilterConnectionField(HumanCharacterNode)
-    driod = relay.Node.Field(DroidCharacterNode)
-    driod_characters = DjangoFilterConnectionField(DroidCharacterNode)
+    droid = relay.Node.Field(DroidCharacterNode)
+    droid_characters = DjangoFilterConnectionField(DroidCharacterNode)
     movie = relay.Node.Field(MovieNode)
     movies = DjangoFilterConnectionField(MovieNode)
 

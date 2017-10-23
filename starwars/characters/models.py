@@ -13,7 +13,7 @@ class AbstractCharacter(models.Model):
 
 class HumanCharacter(AbstractCharacter):
     home_planet = models.CharField(max_length=140)
-    friends = models.ManyToManyField('HumanCharacter')
+    friends = models.ManyToManyField('HumanCharacter', blank=True, null=True)
 
     def __str__(self):
         return self.name
