@@ -4,11 +4,11 @@ from .models import HumanCharacter, DroidCharacter
 
 
 class HumanCharacterAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ('friends', 'appears_in')
 
 
 class DroidCharacterAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ('appears_in', )
 
 
 admin.site.register(HumanCharacter, HumanCharacterAdmin)
