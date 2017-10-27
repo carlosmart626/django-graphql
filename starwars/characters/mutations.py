@@ -21,7 +21,8 @@ class UpdateHumanCharacter(graphene.Mutation):
     def mutate(self, args, context, info):
         try:
             human_data = args.get('human_input')
-            human = HumanCharacter.objects.get(human_data['human_id'])
+            print(human_data)
+            human = HumanCharacter.objects.get(pk=human_data['human_id'])
             human.name = human_data['name']
             human.home_planet = human_data['home_planet']
             human.save()
