@@ -1,0 +1,4 @@
+djangographql:
+  restart: always
+  build: ./starwars
+  command: ./run.sh

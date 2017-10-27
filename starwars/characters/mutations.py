@@ -5,9 +5,7 @@ from .models import HumanCharacter
 
 
 class HumanCharacterInputType(graphene.InputObjectType):
-    """
-    CarInsuranceApplicationType
-    """
+
     human_id = graphene.Int(required=True)
     name = graphene.String()
     home_planet = graphene.String()
