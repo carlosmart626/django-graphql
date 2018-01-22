@@ -13,15 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import channels
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
-
 from channels.routing import route_class, route
 from graphql_ws.django_channels import GraphQLSubscriptionConsumer
 
 from characters.views import HumanCharacterViewSet, DroidCharacterViewSet, current_datetime
 from movies.views import MovieViewSet
+from characters.subscriptions import HumanCharacterSubscription, DroidCharacterSubscription
+from graphene_django_subscriptions import GraphqlAPIDemultiplexer
 
 from starwars.consumers import ws_GQLData, ws_GQL_connect
 
@@ -38,14 +40,18 @@ urlpatterns = [
     url(r'^date-test/', current_datetime)
 ]
 
-channel_routing = [
-    route_class(GraphQLSubscriptionConsumer, path=r"^/subscriptions"),
-    route("http.request", "starwars.consumers.http_consumer", path=r"^/test"),
-    # route("websocket.connect", "starwars.consumers.ws_add", path=r"^/test2"),
-    # route("websocket.receive", "starwars.consumers.ws_message", path=r"^/test2"),
-    # route("websocket.disconnect", "starwars.consumers.ws_disconnect", path=r"^/test2"),
-    route('http.request', ws_GQLData, path=r"^/gql"),
-    route('websocket.connect', ws_GQL_connect, path=r"^/gql"),
-    route('websocket.receive', ws_GQLData, path=r"^/gql")
+class CustomAppDemultiplexer(GraphqlAPIDemultiplexer):
+    consumers = {
+        'humans': HumanCharacterSubscription.get_binding().consumer,
+        'droids': DroidCharacterSubscription.get_binding().consumer
+    }
 
+
+app_routing = [
+    route_class(CustomAppDemultiplexer)
+]
+
+project_routing = [
+    channels.include("starwars.urls.app_routing",
+            path=r"^/subscriptions"),
 ]

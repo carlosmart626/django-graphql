@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'graphene_django',
     'channels',
+    'channels_api',
 
     'characters',
     'movies',
@@ -169,9 +170,11 @@ JWT_AUTH = {
 }
 
 GRAPHENE = {
+    'SCHEMA_INDENT': 4,
     'MIDDLEWARE': [
-        # 'api.middleware.depromise_subscription',
-    ]
+        'graphene_django_subscriptions.depromise_subscription',
+    ],
+    'SCHEMA': 'api.schemas.schema',
 }
 
 # if 'MIDDLEWARE' in GRAPHENE:
@@ -186,7 +189,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("localhost", 6379)],
         },
-        "ROUTING": "starwars.urls.channel_routing",
+        "ROUTING": "starwars.urls.project_routing",
     },
 
 }

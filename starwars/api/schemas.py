@@ -13,6 +13,7 @@ from characters.schemas import HumanCharacterNode, DroidCharacterNode
 from characters.mutations import UpdateHumanCharacter
 from movies.schemas import MovieNode
 from graphene_django.debug import DjangoDebug
+from characters.subscriptions import HumanCharacterSubscription, DroidCharacterSubscription
 
 
 def make_sub(info, gid):
@@ -57,21 +58,10 @@ class MutationRoot(ObjectType):
     update_human = UpdateHumanCharacter.Field()
 
 
-class Subscription(graphene.ObjectType):
-
-    sub_character = graphene.Field(HumanCharacterNode, description='subscribe to updated product', id=graphene.Int())
-
-    def resolve_sub_character(self, info, **input):
-        print("Resolve characters!!!")
-        # return Observable.from_iterable(make_sub(info, input.get('sub_character')))
-
-        # async def compat(result, delay):
-        #     yield result
-        #     await asyncio.sleep(delay)
-        # return compat(make_sub(info, input.get('product')), .1)
-        return Observable.interval(1000)\
-                         .map(lambda i: "{0}".format(i))\
-                         .take_while(lambda i: int(i) <= up_to)
+class Subscriptions(graphene.ObjectType):
+    human_subscription = HumanCharacterSubscription.Field()
+    droid_subscription = DroidCharacterSubscription.Field()
 
 
-schema = graphene.Schema(query=GlobalQuery, mutation=MutationRoot, subscription=Subscription)
+schema = graphene.Schema(
+    query=GlobalQuery, mutation=MutationRoot, subscription=Subscriptions)
