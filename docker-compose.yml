@@ -1,4 +1,16 @@
-djangographql:
-  restart: always
-  build: ./starwars
-  command: ./run.sh
+version: '3'
+services:
+  web:
+    restart: always
+    build: ./starwars
+    ports:
+      - 8000:8000
+    links:
+      - redis:redis
+    command: python manage.py runserver 0.0.0.0:8000
+
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"

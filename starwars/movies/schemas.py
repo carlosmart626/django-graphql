@@ -8,4 +8,5 @@ class MovieNode(DjangoObjectType):
 
     class Meta:
         model = Movie
+        filter_fields = []
         interfaces = (relay.Node,)

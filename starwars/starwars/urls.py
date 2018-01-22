@@ -17,8 +17,13 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
 
-from characters.views import HumanCharacterViewSet, DroidCharacterViewSet
+from channels.routing import route_class, route
+from graphql_ws.django_channels import GraphQLSubscriptionConsumer
+
+from characters.views import HumanCharacterViewSet, DroidCharacterViewSet, current_datetime
 from movies.views import MovieViewSet
+
+from starwars.consumers import ws_GQLData, ws_GQL_connect
 
 router = routers.DefaultRouter()
 router.register(r'human-characters', HumanCharacterViewSet)
@@ -30,4 +35,17 @@ urlpatterns = [
     url(r'^api-rest/', include(router.urls)),
     url(r'^api-graphql/', include('api.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^date-test/', current_datetime)
+]
+
+channel_routing = [
+    route_class(GraphQLSubscriptionConsumer, path=r"^/subscriptions"),
+    route("http.request", "starwars.consumers.http_consumer", path=r"^/test"),
+    # route("websocket.connect", "starwars.consumers.ws_add", path=r"^/test2"),
+    # route("websocket.receive", "starwars.consumers.ws_message", path=r"^/test2"),
+    # route("websocket.disconnect", "starwars.consumers.ws_disconnect", path=r"^/test2"),
+    route('http.request', ws_GQLData, path=r"^/gql"),
+    route('websocket.connect', ws_GQL_connect, path=r"^/gql"),
+    route('websocket.receive', ws_GQLData, path=r"^/gql")
+
 ]

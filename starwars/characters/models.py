@@ -1,4 +1,7 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from channels import Group
 
 from movies.models import Movie
 
@@ -17,6 +20,16 @@ class HumanCharacter(AbstractCharacter):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=HumanCharacter)
+def send_update(sender, instance, created, *args, **kwargs):
+    uuid = str(instance.uuid)
+    if created:
+        Group("gqp.character-add").send({'added': True})
+        return
+    Group('gqp.character-updated.{0}'.format(uuid))\
+        .send({'text': uuid})
 
 
 class DroidCharacter(AbstractCharacter):

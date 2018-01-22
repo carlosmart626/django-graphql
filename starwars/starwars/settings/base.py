@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'graphene_django',
+    'channels',
 
     'characters',
     'movies',
@@ -165,4 +166,27 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+GRAPHENE = {
+    'MIDDLEWARE': [
+        # 'api.middleware.depromise_subscription',
+    ]
+}
+
+# if 'MIDDLEWARE' in GRAPHENE:
+#     GRAPHENE['MIDDLEWARE'] += ['graphene_django.debug.DjangoDebugMiddleware', ]
+# else:
+#     GRAPHENE.update({'MIDDLEWARE': ['graphene_django.debug.DjangoDebugMiddleware', ]})
+
+CHANNELS_WS_PROTOCOLS = ["graphql-ws", ]
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "starwars.urls.channel_routing",
+    },
+
 }

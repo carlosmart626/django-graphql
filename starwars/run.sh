@@ -1,1 +1,2 @@
-python manage.py runserver 0.0.0.0:9000
+#!/bin/sh
+python manage.py runserver 0.0.0.0:8000
