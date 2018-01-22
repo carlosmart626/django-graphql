@@ -177,17 +177,17 @@ GRAPHENE = {
     'SCHEMA': 'api.schemas.schema',
 }
 
-# if 'MIDDLEWARE' in GRAPHENE:
-#     GRAPHENE['MIDDLEWARE'] += ['graphene_django.debug.DjangoDebugMiddleware', ]
-# else:
-#     GRAPHENE.update({'MIDDLEWARE': ['graphene_django.debug.DjangoDebugMiddleware', ]})
+if 'MIDDLEWARE' in GRAPHENE:
+    GRAPHENE['MIDDLEWARE'] += ['graphene_django.debug.DjangoDebugMiddleware', ]
+else:
+    GRAPHENE.update({'MIDDLEWARE': ['graphene_django.debug.DjangoDebugMiddleware', ]})
 
 CHANNELS_WS_PROTOCOLS = ["graphql-ws", ]
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": [("redis", 6379)],
         },
         "ROUTING": "starwars.urls.project_routing",
     },
